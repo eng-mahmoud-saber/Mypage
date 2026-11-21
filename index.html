@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الملف الشخصي</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f5f9;--card:#fff;--text:#14213d;--muted:#667085;--line:#e4e7ec;--accent:#2563eb}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1420;--card:#171f30;--text:#eef2fb;--muted:#9aa7bd;--line:#27324a;--accent:#60a5fa}}
+:root[data-theme="dark"]{--bg:#0e1420;--card:#171f30;--text:#eef2fb;--muted:#9aa7bd;--line:#27324a;--accent:#60a5fa}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.5}
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 32px}
+.head{text-align:center;padding:12px 0 18px}
+.avatar{width:96px;height:96px;border-radius:50%;background:var(--accent);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+h1{margin:0;font-size:24px}
+.sub{color:var(--muted);margin-top:4px;font-size:15px}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-decoration:none;color:var(--text)}
+.ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;flex:none}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-size:16px}
+.tx span{display:block;color:var(--muted);font-size:13px;direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go{color:var(--muted);font-size:20px}
+.qr{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.qr h2{margin:0 0 4px;font-size:17px}
+.qr p{margin:0 0 12px;color:var(--muted);font-size:13px}
+#qrbox{display:inline-block;background:#fff;padding:12px;border-radius:12px}
+#qrbox img,#qrbox canvas{max-width:100%;height:auto}
+.btn{margin-top:14px;display:block;width:100%;border:0;border-radius:12px;background:var(--accent);color:#fff;font-size:16px;padding:12px;cursor:pointer;font-family:inherit}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.row .bar{display:flex;gap:6px}
+.row .bar button{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:15px}
+input,select{width:100%;font-family:inherit;font-size:16px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+#msg{text-align:center;color:var(--muted);margin-top:10px;min-height:20px}
+</style>
+<style>artifact-sync,artifact-local{display:contents}</style></head>
+<body>
+<div class="wrap" id="app"></div>
+<script type="application/json" id="data">{"name":"Eng. Mahmoud Saber","title":"مهندس","pageUrl":"https://claude.ai/artifact/QfnNTJn1nKCnZPx3XNKbFh","items":[{"type":"phone","label":"","value":"+201060386340"},{"type":"whatsapp","label":"","value":"+201060386340"},{"type":"facebook","label":"","value":"https://www.facebook.com/share/1DZHtDxhf8/"},{"type":"messenger","label":"","value":"https://m.me/mahmoud.s.mahmoud.125"},{"type":"telegram","label":"","value":"+201060386340"},{"type":"meet","label":"","value":""},{"type":"imo","label":"","value":"+201060386340"},{"type":"signal","label":"","value":"+201060386340"}]}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+var D = JSON.parse(document.getElementById("data").textContent);
+var app = document.getElementById("app");
+var OWNER = false;
+var us = function(v){return v.replace(/^https?:\/\/[^\/]+\//,"").replace(/^@/,"");};
+var dg = function(v){return v.replace(/\D/g,"");};
+var T = {
+ phone:{n:"اتصال هاتفي",c:"#16a34a",t:"☎",ph:"+201000000000",h:function(v){return "tel:"+v.replace(/[^\d+]/g,"");}},
+ whatsapp:{n:"واتساب",c:"#25d366",t:"WA",ph:"رقم بكود الدولة 201000000000",h:function(v){return "https://wa.me/"+dg(v);}},
+ facebook:{n:"فيسبوك",c:"#1877f2",t:"f",ph:"اسم المستخدم أو الرابط",h:function(v){return "https://facebook.com/"+us(v);}},
+ messenger:{n:"ماسنجر",c:"#a334fa",t:"M",ph:"اسم المستخدم",h:function(v){return "https://m.me/"+us(v);}},
+ telegram:{n:"تلجرام",c:"#229ed9",t:"TG",ph:"اسم المستخدم",h:function(v){return "https://t.me/"+us(v);}},
+ meet:
+ {n:"جوجل ميت",c:"#00897b",t:"Meet",ph:"abc-defg-hij",h:function(v){return /meet\.google/.test(v)?v:"https://meet.google.com/"+v;}},
+ imo:{n:"ايمو",c:"#0a8fdc",t:"imo",ph:"+201000000000",h:function(v){return "tel:"+v.replace(/[^\d+]/g,"");}},
+ signal:{n:"سيجنال",c:"#3a76f0",t:"Sg",ph:"+201000000000",h:function(v){return "https://signal.me/#p/+"+dg(v);}},
+ instagram:{n:"انستجرام",c:"#e1306c",t:"IG",ph:"اسم المستخدم",h:function(v){return "https://instagram.com/"+us(v);}},
+ tiktok:{n:"تيك توك",c:"#111827",t:"TT",ph:"اسم المستخدم",h:function(v){return "https://tiktok.com/@"+us(v);}},
+ email:{n:"بريد إلكتروني",c:"#ea580c",t:"@",ph:"name@mail.com",h:function(v){return "mailto:"+v;}},
+ website:{n:"موقع",c:"#0d9488",t:"www",ph:"example.com",h:function(v){return /^https?:/i.test(v)?v:"https://"+v;}},
+ custom:{n:"رابط آخر",c:"#64748b",t:"🔗",ph:"الرابط أو النص",h:function(v){return /^[a-z]+:/i.test(v)?v:"https://"+v;}}
+};
+function el(t,a,k){var e=document.createElement(t);for(var x in (a||{})){if(x==="class")e.className=a[x];else if(x.slice(0,2)==="on")e[x]=a[x];else e.setAttribute(x,a[x]);}(k||[]).forEach(function(c){e.append(c);});return e;}
+
+function renderView(){
+ app.innerHTML="";
+ app.append(el("div",{class:"head"},[el("div",{class:"avatar"},[(D.name||"؟").trim().charAt(0)]),el("h1",{},[D.name]),el("div",{class:"sub"},[D.title])]));
+ var list=el("div",{class:"list"});
+ D.items.forEach(function(i){
+  if(!i.value||!i.value.trim())return;
+  var t=T[i.type]||T.custom, v=i.value.trim();
+  list.append(el("a",{class:"item",href:t.h(v),target:"_blank",rel:"noopener"},[
+   el("div",{class:"ic",style:"background:"+t.c},[t.t]),
+   el("div",{class:"tx"},[el("b",{},[i.label||t.n]),el("span",{},[v])]),
+   el("div",{class:"go"},["‹"])]));
+ });
+ app.append(list);
+ var box=el("div",{id:"qrbox"});
+ var vcf=el("button",{class:"btn",onclick:function(){
+  var ph=D.items.filter(function(i){return i.type==="phone"&&i.value;})[0];
+  var v="BEGIN:VCARD\nVERSION:3.0\nFN:"+D.name+"\nTITLE:"+D.title+"\n"+(ph?"TEL;TYPE=CELL:"+ph.value+"\n":"")+"END:VCARD";
+  window.open("data:text/vcard;charset=utf-8,"+encodeURIComponent(v),"_blank");}},["حفظ جهة الاتصال"]);
+ app.append(el("div",{class:"qr"},[el("h2",{},["امسح الكود"]),el("p",{},["وجّه الكاميرا على الكود لفتح هذه الصفحة"]),box,vcf]));
+ try{new QRCode(box,{text:D.pageUrl||location.href.split("#")[0],width:200,height:200,correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+ if(OWNER)app.append(el("button",{class:"btn ghost",onclick:renderEdit},["✎ تعديل الصفحة"]));
+}
+
+function renderEdit(){
+ app.innerHTML="";
+ app.append(el("h1",{style:"font-size:20px;text-align:center"},["تعديل الصفحة"]));
+ var inp=function(lbl,val,fn,ph){var i=el("input",{value:val||"",placeholder:ph||""});i.oninput=function(){fn(i.value);};return [el("label",{},[lbl]),i];};
+ inp("الاسم",D.name,function(v){D.name=v;}).forEach(function(e){app.append(e);});
+ inp("المسمى / نبذة",D.title,function(v){D.title=v;}).forEach(function(e){app.append(e);});
+ app.append(el("label",{},["وسائل التواصل (اترك القيمة فاضية لإخفاء الزر)"]));
+ D.items.forEach(function(it,idx){
+  var sel=el("select");
+  Object.keys(T).forEach(function(k){var o=el("option",{value:k},[T[k].n]);if(k===it.type)o.selected=true;sel.append(o);});
+  sel.onchange=function(){it.type=sel.value;renderEdit();};
+  var lab=el("input",{value:it.label||"",placeholder:"اسم الزر (اختياري)"});lab.oninput=function(){it.label=lab.value;};
+  var val=el("input",{value:it.value||"",placeholder:(T[it.type]||T.custom).ph,dir:"ltr"});val.oninput=function(){it.value=val.value;};
+  var mv=function(d){return function(){var j=idx+d;if(j<0||j>=D.items.length)return;var x=D.items.splice(idx,1)[0];D.items.splice(j,0,x);renderEdit();};};
+  var bar=el("div",{class:"bar"},[el("button",{onclick:mv(-1)},["↑"]),el("button",{onclick:mv(1)},["↓"]),el("button",{onclick:function(){D.items.splice(idx,1);renderEdit();}},["✕ حذف"])]);
+  app.append(el("div",{class:"row"},[sel,lab,val,bar]));
+ });
+ app.append(el("button",{class:"btn ghost",onclick:function(){D.items.push({type:"custom",label:"",value:""});renderEdit();}},["+ إضافة وسيلة"]));
+ inp("رابط الصفحة (يظهر في الـ QR)",D.pageUrl,function(v){D.pageUrl=v;}).forEach(function(e){app.append(e);});
+ app.append(el("button",{class:"btn",onclick:save},["حفظ ونشر"]));
+ app.append(el("button",{class:"btn ghost",onclick:function(){location.reload();}},["إلغاء"]));
+ app.append(el("div",{id:"msg"}));
+}
+
+async function save(){
+ var m=document.getElementById("msg");m.textContent="جارٍ الحفظ…";
+ try{
+  var a=await claude.use("artifact"); if(!a)throw new Error("na");
+  var c=document.documentElement.cloneNode(true);
+  c.querySelector("#app").innerHTML="";
+  c.querySelector("#data").textContent=JSON.stringify(D).replace(/</g,"\\u003c");
+  await a.publish("<!DOCTYPE html>\n"+c.outerHTML);
+ }catch(e){m.textContent="تعذّر الحفظ، حاول مرة أخرى";}
+}
+
+renderView();
+if(window.claude&&claude.use){
+ claude.use("user").then(function(u){return u&&u.isOwner();}).then(function(ok){if(ok){OWNER=true;renderView();}}).catch(function(){});
+}
+</script>
+
+
+</body></html>
